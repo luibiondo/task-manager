@@ -1,4 +1,5 @@
 import { Card } from '@/components/Cards/card'
+import { Button } from '@/components/Button'
 
 interface IColumnProps {
   title: string
@@ -10,7 +11,11 @@ function Column({ title }: IColumnProps) {
       
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-white font-semibold">{title}</h2>
-        <button className="text-white text-xl">+</button>
+
+        {/* calling the compnenet button */}
+        <Button onClick={() => alert('Estamos trabalhando nisso!')}>
+          +
+        </Button>
       </div>
 
       <div className="space-y-2">

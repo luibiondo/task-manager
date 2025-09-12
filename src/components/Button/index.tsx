@@ -4,9 +4,9 @@ interface IButton {
     onClick: () => void
 }
 
-function Button({children, onClick}: IButton) {
+function Button({children, onClick,}: IButton) {
     return(
-        <button onClick={onClick} className="bg-[#000] p-2 rounded-sm text-[#fff]">
+        <button onClick={onClick} className="bg-[#000] p-2 rounded-sm text-[#fff] bg-neutral-900">
             {children}
         </button>
     )
