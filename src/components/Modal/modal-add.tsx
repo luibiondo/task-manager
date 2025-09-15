@@ -36,9 +36,17 @@ export function ModalAdd({ isOpen, setOpen, addTask }: IModalAddProps) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/90">
       <div className="bg-white w-150 p-4 rounded shadow-lg flex flex-col justify-center">
-        <h1 className="p-6 text-xl text-center">Nova Tarefa</h1>
+        <div className="relative border-b border-gray-300 mb-4">
+          <h1 className="p-6 text-xl text-center">Nova Tarefa</h1>
+          <button
+            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 p-2 bg-gray-200 rounded hover:bg-gradient-to-bl from-violet-500 to-fuchsia-500 hover:text-white"
+            onClick={() => setOpen(false)}
+          >
+            X
+          </button>
+        </div>
 
         <label>Nome da Tarefa:</label>
         <input
