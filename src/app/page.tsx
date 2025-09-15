@@ -11,9 +11,9 @@ export default function Home() {
       <div className='w-full h-screen bg-gradient-to-bl from-violet-500 to-fuchsia-500 flex p-6 gap-1 justify-center mt-20'>
         
 
-        <Column title="Hoje"></Column>
-        <Column title="Esta semana"></Column>
-        <Column title="Mais tarde"></Column>        
+        <Column title="Atrasado"></Column>
+        <Column title="Pendente"></Column>
+        <Column title="Feito"></Column>        
       </div>
     </main>
   )
