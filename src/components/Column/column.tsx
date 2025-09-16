@@ -22,6 +22,7 @@ export function Column({ title, tasks, onAdd, onEdit }: IColumnProps) {
           <Card 
             key={index} 
             text={task.title} 
+            index={index}
             onEdit={() => onEdit(index)} 
           />
         ))}

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Column } from '@/components/Column/column'
 import { ModalAdd, Task } from "@/components/Modal/modal-add";
 import { ModalEdit } from "@/components/ModalEdit/modal-edit";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
 export default function Home() {
   // controla modal de adicionar (guarda a coluna em que será aberto)
@@ -52,6 +53,28 @@ export default function Home() {
     setEditing(null); // fecha modal
   };
 
+  function reorder<T>(list: T[], startIndex: number, endIndex: number) {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1) //remove da lista o item que pegou
+    result.splice(endIndex, 0, removed)
+
+    return result;
+  }
+
+  function onDragEnd(result: any) {
+      if(!result.destination) {
+        return;
+      }
+
+      console.log(result.source.index) // Posição onde iniciamos o drag
+      console.log(result.destination.index) // Posição onde soltou o item
+
+      const items = reorder(tasks, result.source.index, result.destination.index) //aq deu erro pq nao existe task
+
+      console.log(items)
+
+      setTasks(items); //deu erro tbm pq ali em cima deu erro
+  }
 
   return (
     <main className='bg-gradient-to-bl from-violet-500 to-fuchsia-500 p-4 h-screen'>
@@ -64,20 +87,31 @@ export default function Home() {
 
       {/* colunas */}
       <div className='w-full bg-gradient-to-bl from-violet-500 to-fuchsia-500 flex p-6 gap-1 justify-center mt-20'>
+
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="pendent-column" type="list" direction="vertical">
+            {(provided) => (
+              <Column
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+                title="Pendente"
+                tasks={tasks.atrasado}
+                onAdd={() => setOpenAdd("atrasado")}
+                onEdit={(index) => setEditing({ column: "atrasado", index })}
+                {provided.placeholder} //aq deu erro tbm
+              />
+            )}
+          </Droppable>
+        </DragDropContext>
+
         <Column
-          title="Atrasado"
-          tasks={tasks.atrasado}
-          onAdd={() => setOpenAdd("atrasado")}
-          onEdit={(index) => setEditing({ column: "atrasado", index })}
-        />
-        <Column
-          title="Pendente"
+          title="Em Progresso"
           tasks={tasks.pendente}
           onAdd={() => setOpenAdd("pendente")}
           onEdit={(index) => setEditing({ column: "pendente", index })}
         />
         <Column
-          title="Feito"
+          title="Concluído"
           tasks={tasks.feito}
           onAdd={() => setOpenAdd("feito")}
           onEdit={(index) => setEditing({ column: "feito", index })}
