@@ -11,7 +11,7 @@ interface IColumnProps {
 
 export function Column({ title, tasks, onAdd, onEdit }: IColumnProps) {
   return (
-    <div className="bg-neutral-900 rounded-xl p-4 w-64 shadow-lg">
+    <div className="bg-neutral-900 rounded-xl p-4 w-96 min-h-36 h-auto shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-white font-semibold">{title}</h2>
         <Button onClick={onAdd}>+</Button>
