@@ -40,7 +40,7 @@ export function Column({ columnId, title, tasks, onAdd, onEdit }: IColumnProps) 
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    onClick={() => onEdit(index)} // quando clica, abre pra editar a tarefa certa pelo index
+                    onClick={() => onEdit(index)} // quando clica, abre pra editar a tarefa certa que é encontrada pelo index
                     className="bg-neutral-800 text-white p-3 rounded-lg shadow hover:bg-gradient-to-bl from-violet-500 to-fuchsia-500 cursor-pointer"
                   >
                     {task.title}

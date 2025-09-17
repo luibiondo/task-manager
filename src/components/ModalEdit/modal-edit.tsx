@@ -33,7 +33,7 @@ export function ModalEdit({ isOpen, setOpen, task, saveEdit, removeTask }: IModa
   // se o modal está fechado, ele não é renderizado
   if (!isOpen) return null;
 
-  // funcção para salvar a edição
+  // função para salvar a edição
   const handleSave = () => {
 
     // se o título da tarefa não estiver vazio

@@ -2,7 +2,7 @@ import { useState } from "react";
 
 interface IModalAddProps {
   isOpen: boolean; // vê se o modal está aberto/fechado
-  setOpen: (open: boolean) => void; // funcção que abre/fecha o modal
+  setOpen: (open: boolean) => void; // função que abre/fecha o modal
   addTask: (task: Task) => void; // função que adiciona a task
 }
 

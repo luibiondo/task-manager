@@ -6,7 +6,7 @@ import { ModalEdit } from "@/components/ModalEdit/modal-edit";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 
 export default function Home() {
-  // estado que guuarda qual coluna está aberta
+  // estado que guarda qual coluna está aberta
   const [openAdd, setOpenAdd] = useState<string | null>(null);
   // estado que guarda qual coluna está sendo editada (guarda a coluna e o índice)
   const [editing, setEditing] = useState<{ column: string; index: number } | null>(null);
@@ -36,10 +36,10 @@ export default function Home() {
     }
   };
 
-  // função que remove task
+  // função que remove uma task
   const removeTask = (column: string, index: number) => {
     const updated = [...tasks[column]];
-    updated.splice(index, 1); // remove pelo indice (splice)
+    updated.splice(index, 1); // remove pelo índice (splice)
     setTasks({ ...tasks, [column]: updated }); // atualiza o estado
     setEditing(null); // fecha o modal de edit
   };
