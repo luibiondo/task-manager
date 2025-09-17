@@ -6,52 +6,60 @@ import { ModalEdit } from "@/components/ModalEdit/modal-edit";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 
 export default function Home() {
+  // estado que guuarda qual coluna está aberta
   const [openAdd, setOpenAdd] = useState<string | null>(null);
+  // estado que guarda qual coluna está sendo editada (guarda a coluna e o índice)
   const [editing, setEditing] = useState<{ column: string; index: number } | null>(null);
 
+  // obj que guarda as tarefas separadas pelas colunas
   const [tasks, setTasks] = useState<{ [key: string]: Task[] }>({
     atrasado: [],
     pendente: [],
     feito: []
   });
 
+  // função que adiciona uma tarefa na coluna certa
   const addTask = (column: string, task: Task) => {
     setTasks({
-      ...tasks,
-      [column]: [...tasks[column], task],
+      ...tasks, // copia o estado que tá
+      [column]: [...tasks[column], task], // adc a task no fim da coluna
     });
   };
 
+  // função que salva a edição de uma tarefa que já existe
   const saveEdit = (task: Task) => {
     if (editing) {
-      const updated = [...tasks[editing.column]];
-      updated[editing.index] = task;
-      setTasks({ ...tasks, [editing.column]: updated });
-      setEditing(null);
+      const updated = [...tasks[editing.column]]; // copia as tasks da coluna
+      updated[editing.index] = task; // pega pelo index e substitui
+      setTasks({ ...tasks, [editing.column]: updated }); // atualiza o estado
+      setEditing(null); // fecha o modal
     }
   };
 
+  // função que remove task
   const removeTask = (column: string, index: number) => {
     const updated = [...tasks[column]];
-    updated.splice(index, 1);
-    setTasks({ ...tasks, [column]: updated });
-    setEditing(null);
+    updated.splice(index, 1); // remove pelo indice (splice)
+    setTasks({ ...tasks, [column]: updated }); // atualiza o estado
+    setEditing(null); // fecha o modal de edit
   };
 
+  // função pra quando o usuário solta uma task depois de arrastar 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
-    if (!destination) return;
+    if (!destination) return; // se solta em um lugar q não é valido não acontece nada
 
-    const sourceCol = tasks[source.droppableId];
-    const destCol = tasks[destination.droppableId];
-    const [movedTask] = sourceCol.splice(source.index, 1);
+    const sourceCol = tasks[source.droppableId]; // coluna de origem
+    const destCol = tasks[destination.droppableId]; // coluna de destino
+    const [movedTask] = sourceCol.splice(source.index, 1); // remove a task da coluna de origem
 
-    if (source.droppableId === destination.droppableId) {
-      sourceCol.splice(destination.index, 0, movedTask);
+    if (source.droppableId === destination.droppableId) { // se arrastar na mesma coluna
+      sourceCol.splice(destination.index, 0, movedTask)
       setTasks({ ...tasks, [source.droppableId]: sourceCol });
-    } else {
+    } 
+    else { // se a coluna de destino for diferente que a de origem
       destCol.splice(destination.index, 0, movedTask);
-      setTasks({ 
+      setTasks({ // altera o estado
         ...tasks, 
         [source.droppableId]: sourceCol,
         [destination.droppableId]: destCol
@@ -60,16 +68,18 @@ export default function Home() {
   };
 
   return (
-    <main className='bg-gradient-to-bl from-violet-500 to-fuchsia-500 h-screen flex flex-col'>
+    <main className='bg-gradient-to-bl from-violet-500 to-fuchsia-500 h-screen flex flex-col'>  
       <div className='fixed top-0 left-0 w-full z-10 p-4 bg-black shadow-md'>
         <h1 className='text-white p-4 bg-neutral-800 rounded-sm'>
           Task Manager - First Project with React
         </h1>
       </div>
 
+      {/* área das colunas */}
       <div className='flex-1 w-full flex p-6 gap-4 justify-center mt-20 overflow-x-auto'>
         <DragDropContext onDragEnd={onDragEnd}>
           {Object.keys(tasks).map(colId => (
+            // renderiza uma coluna pra cada chave daquele obj
             <Column
               key={colId}
               columnId={colId}
@@ -82,12 +92,14 @@ export default function Home() {
         </DragDropContext>
       </div>
 
+      {/* modal de adicionar task */}
       <ModalAdd
         isOpen={!!openAdd}
         setOpen={() => setOpenAdd(null)}
         addTask={(task) => { if(openAdd) addTask(openAdd, task); }}
       />
 
+      {/* modal de edit */}
       <ModalEdit
         isOpen={!!editing}
         setOpen={() => setEditing(null)}

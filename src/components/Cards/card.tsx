@@ -1,17 +1,18 @@
 interface CardProps {
-  text: string;
-  onEdit: () => void;
+  text: string; // título da task
+  onEdit: () => void; // função que abre o modalEdit
 }
 
+// componente card
 function Card({ text, onEdit }: CardProps) {
   return (
     <div
-      onClick={onEdit}
+      onClick={onEdit} // chama a função onEdit
       className="bg-neutral-800 text-white p-3 rounded-lg shadow flex justify-center hover:bg-gradient-to-bl from-violet-500 to-fuchsia-500 cursor-pointer"
     >
-      {text}
+      {text} 
     </div>
   );
 }
 
-export { Card };
+export { Card }; // exporta o componente 
