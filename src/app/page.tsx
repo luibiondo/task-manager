@@ -60,14 +60,14 @@ export default function Home() {
   };
 
   return (
-    <main className='bg-gradient-to-bl from-violet-500 to-fuchsia-500 p-4 h-screen'>
+    <main className='bg-gradient-to-bl from-violet-500 to-fuchsia-500 h-screen flex flex-col'>
       <div className='fixed top-0 left-0 w-full z-10 p-4 bg-black shadow-md'>
         <h1 className='text-white p-4 bg-neutral-800 rounded-sm'>
           Task Manager - First Project with React
         </h1>
       </div>
 
-      <div className='w-full flex p-6 gap-4 justify-center mt-20'>
+      <div className='flex-1 w-full flex p-6 gap-4 justify-center mt-20 overflow-x-auto'>
         <DragDropContext onDragEnd={onDragEnd}>
           {Object.keys(tasks).map(colId => (
             <Column
