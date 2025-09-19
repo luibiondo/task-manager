@@ -25,6 +25,7 @@ export default function Home() {
     try {
       const response = await getTasks()
       console.log(response)
+      console.log(response.map((item) => item))
     } catch (err) {
       console.log(err)
     }
