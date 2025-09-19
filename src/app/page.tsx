@@ -6,9 +6,12 @@ import { ModalEdit } from "@/components/ModalEdit/modal-edit";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect } from "react";
 import { getTasks } from "@/services/taskService";
+import { toast } from "sonner";
+
+
 
 export default function Home() {
-
+  
   // estado que guarda qual coluna está aberta
   const [openAdd, setOpenAdd] = useState<string | null>(null);
   // estado que guarda qual coluna está sendo editada (guarda a coluna e o índice)
@@ -26,8 +29,10 @@ export default function Home() {
       const response = await getTasks()
       console.log(response)
       console.log(response.map((item) => item))
+      toast.success("Tarefas carregadas com sucesso!")
     } catch (err) {
-      console.log(err)
+      console.log(err);
+      toast.error("Erro ao carregar tarefas. Tente Novamente!")
     }
   }
 
