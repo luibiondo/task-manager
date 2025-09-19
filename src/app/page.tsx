@@ -1,9 +1,11 @@
 'use client'
 import { useState } from "react";
 import { Column } from '@/components/Column/column'
-import { ModalAdd, Task } from "@/components/Modal/modal-add";
+import { ModalAdd, Task as ModalTask} from "@/components/Modal/modal-add";
 import { ModalEdit } from "@/components/ModalEdit/modal-edit";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
+import { useEffect } from "react";
+import { getTasks, createTask, updateTask, deleteTask, Task as ApiTask} from "@/services/taskService";
 
 export default function Home() {
   // estado que guarda qual coluna está aberta
