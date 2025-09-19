@@ -7,9 +7,9 @@ export interface Task {
     startDate?: string;
     endDate?: string;
     priority?: string;
+    status?: string; // campo do back
 }
 
-// funções CRUD
 // GET - buscar todas as tarefas
 export async function getTasks(): Promise<Task[]> {
     const response = await api.get("/task");

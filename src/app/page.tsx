@@ -1,13 +1,14 @@
 'use client'
 import { useState } from "react";
 import { Column } from '@/components/Column/column'
-import { ModalAdd, Task as ModalTask} from "@/components/Modal/modal-add";
+import { ModalAdd, Task } from "@/components/Modal/modal-add";
 import { ModalEdit } from "@/components/ModalEdit/modal-edit";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect } from "react";
-import { getTasks, createTask, updateTask, deleteTask, Task as ApiTask} from "@/services/taskService";
+import { getTasks } from "@/services/taskService";
 
 export default function Home() {
+
   // estado que guarda qual coluna está aberta
   const [openAdd, setOpenAdd] = useState<string | null>(null);
   // estado que guarda qual coluna está sendo editada (guarda a coluna e o índice)
@@ -19,6 +20,15 @@ export default function Home() {
     pendente: [],
     feito: []
   });
+
+  async function runGetTasks() {
+    try {
+      const response = await getTasks()
+      console.log(response)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   // função que adiciona uma tarefa na coluna certa
   const addTask = (column: string, task: Task) => {
@@ -58,19 +68,23 @@ export default function Home() {
     if (source.droppableId === destination.droppableId) { // se arrastar na mesma coluna
       sourceCol.splice(destination.index, 0, movedTask)
       setTasks({ ...tasks, [source.droppableId]: sourceCol });
-    } 
+    }
     else { // se a coluna de destino for diferente que a de origem
       destCol.splice(destination.index, 0, movedTask);
       setTasks({ // altera o estado
-        ...tasks, 
+        ...tasks,
         [source.droppableId]: sourceCol,
         [destination.droppableId]: destCol
       });
     }
   };
 
+  useEffect(() => {
+    runGetTasks()
+  }, [])
+
   return (
-    <main className='bg-gradient-to-bl from-violet-500 to-fuchsia-500 h-screen flex flex-col'>  
+    <main className='bg-gradient-to-bl from-violet-500 to-fuchsia-500 h-screen flex flex-col'>
       <div className='fixed top-0 left-0 w-full z-10 p-4 bg-black shadow-md'>
         <h1 className='text-white p-4 bg-neutral-800 rounded-sm'>
           Task Manager - First Project with React
@@ -98,7 +112,7 @@ export default function Home() {
       <ModalAdd
         isOpen={!!openAdd}
         setOpen={() => setOpenAdd(null)}
-        addTask={(task) => { if(openAdd) addTask(openAdd, task); }}
+        addTask={(task) => { if (openAdd) addTask(openAdd, task); }}
       />
 
       {/* modal de edit */}
@@ -107,7 +121,7 @@ export default function Home() {
         setOpen={() => setEditing(null)}
         task={editing ? tasks[editing.column][editing.index] : null}
         saveEdit={saveEdit}
-        removeTask={() => { if(editing) removeTask(editing.column, editing.index); }}
+        removeTask={() => { if (editing) removeTask(editing.column, editing.index); }}
       />
     </main>
   )
