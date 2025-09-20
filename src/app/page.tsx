@@ -1,17 +1,19 @@
 'use client'
 import { useState } from "react";
 import { Column } from '@/components/Column/column'
-import { ModalAdd, Task } from "@/components/Modal/modal-add";
+import { ModalAdd } from "@/components/Modal/modal-add";
 import { ModalEdit } from "@/components/ModalEdit/modal-edit";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect } from "react";
 import { getTasks } from "@/services/taskService";
 import { toast } from "sonner";
+import { Task } from "@/services/taskService";
+
 
 
 
 export default function Home() {
-  
+
   // estado que guarda qual coluna está aberta
   const [openAdd, setOpenAdd] = useState<string | null>(null);
   // estado que guarda qual coluna está sendo editada (guarda a coluna e o índice)
@@ -26,23 +28,37 @@ export default function Home() {
 
   async function runGetTasks() {
     try {
-      const response = await getTasks()
-      console.log(response)
-      console.log(response.map((item) => item))
-      toast.success("Tarefas carregadas com sucesso!")
+      const response = await getTasks();
+
+      const apiTasks: { [key: string]: Task[] } = {
+        atrasado: [],
+        pendente: [],
+        feito: []
+      };
+
+      response.forEach((task) => {
+        if (task.status && apiTasks[task.status]) {
+          apiTasks[task.status].push(task);
+        }
+      });
+
+      setTasks(apiTasks);
+      toast.success("Tarefas carregadas com sucesso!");
     } catch (err) {
-      console.log(err);
-      toast.error("Erro ao carregar tarefas. Tente Novamente!")
+      console.error(err);
+      toast.error("Erro ao carregar tarefas. Tente Novamente!");
     }
   }
 
+
   // função que adiciona uma tarefa na coluna certa
-  const addTask = (column: string, task: Task) => {
-    setTasks({
-      ...tasks, // copia o estado que tá
-      [column]: [...tasks[column], task], // adc a task no fim da coluna
-    });
+  const addTask = (task: Task) => {
+    setTasks(prev => ({
+      ...prev, // copia as colunas mantendo as tasks
+      [task.status!]: [...prev[task.status!], task], // pega o array de tasks atual dessa coluna e cria um novo adc a nova tarefa no final
+    }));
   };
+
 
   // função que salva a edição de uma tarefa que já existe
   const saveEdit = (task: Task) => {
@@ -118,8 +134,9 @@ export default function Home() {
       <ModalAdd
         isOpen={!!openAdd}
         setOpen={() => setOpenAdd(null)}
-        addTask={(task) => { if (openAdd) addTask(openAdd, task); }}
+        addTask={(task) => addTask(task)} // só passa a task
       />
+
 
       {/* modal de edit */}
       <ModalEdit

@@ -1,17 +1,12 @@
 import { useState } from "react";
+import { Task, createTask } from "@/services/taskService";
+import { toast } from "sonner";
+
 
 interface IModalAddProps {
   isOpen: boolean; // vê se o modal está aberto/fechado
   setOpen: (open: boolean) => void; // função que abre/fecha o modal
   addTask: (task: Task) => void; // função que adiciona a task
-}
-
-export interface Task {
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  priority: string;
 }
 
 // componente modalAdd
@@ -27,21 +22,39 @@ export function ModalAdd({ isOpen, setOpen, addTask }: IModalAddProps) {
   if (!isOpen) return null;
 
   // função para salvar a task criada
-  const handleSave = () => {
-    if (title.trim() !== "") { // vê se a task tem um título
+  const handleSave = async () => {
+  if (title.trim() !== "") {
+    try {
+      // cria a task no backend
+      const newTask: Omit<Task, "id"> = {
+        title,
+        description,
+        startDate,
+        endDate,
+        priority,
+        status: "pendente" // status inicial
+      };
 
-      // adiciona a task
-      addTask({ title, description, startDate, endDate, priority });
+      const savedTask = await createTask(newTask); // POST
 
-      // limpa os campos
+      // adiciona a task no estado local
+      addTask(savedTask);
+
+      // limpa campos
       setTitle("");
       setDescription("");
       setStartDate("");
       setEndDate("");
       setPriority("");
       setOpen(false);
+
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao criar task. Tente novamente!");
     }
-  };
+  }
+};
+
 
   return (
     // estilo do modal
